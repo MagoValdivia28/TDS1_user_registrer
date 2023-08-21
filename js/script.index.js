@@ -1,3 +1,79 @@
+class User {
+    constructor(name, email, birthdate, city, telephone, cpf) {
+        this.name = name
+        this.email = email
+        this.birthdate = birthdate
+        this.age = 'age'
+        this.city = city
+        this.cpf = cpf
+        this.telephone = telephone
+        this.client = 'client'
+    }
+
+    getZodiacSign() {
+        let birthdate = new Date(this.birthdate);
+        let day = birthdate.getDate();
+        let month = birthdate.getMonth() + 1;
+        console.log("Passou pelo getSigno() da class User");
+        if ((month == 1 && day <= 20) || (month == 12 && day >= 22)) {
+            return "Capricórnio ♑";
+        } else if ((month == 1 && day >= 21) || (month == 2 && day <= 18)) {
+            return "Aquário ♒";
+        } else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
+            return "Peixes ♓";
+        } else if ((month == 3 && day >= 21) || (month == 4 && day <= 20)) {
+            return "Áries ♈";
+        } else if ((month == 4 && day >= 21) || (month == 5 && day <= 20)) {
+            return "Touro ♉";
+        } else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
+            return "Gêmeos ♊";
+        } else if ((month == 6 && day >= 22) || (month == 7 && day <= 22)) {
+            return "Câncer ♋";
+        } else if ((month == 7 && day >= 23) || (month == 8 && day <= 23)) {
+            return "Leão ♌";
+        } else if ((month == 8 && day >= 24) || (month == 9 && day <= 23)) {
+            return "Virgem ♍";
+        } else if ((month == 9 && day >= 24) || (month == 10 && day <= 23)) {
+            return "Libra ♎";
+        } else if ((month == 10 && day >= 24) || (month == 11 && day <= 22)) {
+            return "Escorpião ♏";
+        } else if ((month == 11 && day >= 23) || (month == 12 && day <= 21)) {
+            return "Sagitário ♐";
+        }
+    }
+
+    getPersonAge(){
+        console.log();
+    }
+
+}
+
+class UserList {
+    constructor() {
+        this.users = [];
+    }
+    addUser(param) {
+        if (isAnyImputAmpty()) {
+            sendErrorMsg("Preecha todos os campos")
+        } else if (!valida_cpf(param.cpf)) {
+            sendErrorMsg("CPF Invalido");
+        } else if (isAlredyExiste()) {
+
+        } else {
+            sendSucessMsg()
+            this.users.push(param)
+            clearField();
+        }
+
+    }
+}
+function isAlredyExiste() {
+
+}
+function sendSucessMsg() {
+    document.getElementById("success-msg").innerHTML = "Parabens, você entrou na lista de espera!"
+}
+
 function showUsers() {
     document.getElementById("main-div").classList.add("hidden")
     document.getElementById("sub-div").classList.remove("hidden")
@@ -8,44 +84,24 @@ function showRegister() {
     document.getElementById("main-div").classList.remove("hidden");
     document.getElementById("sub-div").classList.add("hidden")
 }
-class User {
-    constructor(name, email, birthdate, age, city, telephone, cpf, client) {
-        this.name = name
-        this.email = email
-        this.birthdate = birthdate
-        this.age = age
-        this.city = city
-        this.telephone = telephone
-        this.cpf = cpf
-        this.client = client
-    }
-}
-
-class UserList {
-    constructor() {
-        this.users = [];
-    }
-    addUser(param) {
-        this.users.push(param)
-    }
-}
 
 let msg = "";
-const arrList = new UserList()
+const arrList = new UserList();
+
 function isAnyImputAmpty() {
     const name = document.getElementById("name").value
     const email = document.getElementById("email").value
     const birthdate = document.getElementById("birthdate").value
-    const address = document.getElementById("address").value
-    const phone = document.getElementById("phone").value
+    const city = document.getElementById("address").value
+    const telephone = document.getElementById("phone").value
     const cpf = document.getElementById("cpf").value
 
-    if (name == "" || email == "" || birthdate == "" || address == "" || phone == "" || cpf == "") {
-        document.getElementById("error-msg").innerHTML = msg = "preencha todos os campos!!";
-        showAllUser().style.display="none"
-    }else{
-    document.getElementById("error-msg").innerHTML = msg
+    if (name == "" || email == "" || birthdate == "" || city == "" || telephone == "" || cpf == "") {
+        return true;
+    } else {
+        return false;
     }
+
 }
 function clearField() {
     document.getElementById("name").value = ""
@@ -60,11 +116,11 @@ function createUser() {
     const name = document.getElementById("name").value
     const email = document.getElementById("email").value
     const birthdate = document.getElementById("birthdate").value
-    const address = document.getElementById("address").value
-    const phone = document.getElementById("phone").value
+    const city = document.getElementById("address").value
+    const telephone = document.getElementById("phone").value
     const cpf = document.getElementById("cpf").value
 
-    const user = new User(name, email, birthdate, address, phone, cpf);
+    const user = new User(name, email, birthdate, city, telephone, cpf);
 
     isAnyImputAmpty();
     sendErrorMsg(msg)
@@ -90,8 +146,9 @@ function showAllUser() {
             <p><b>nome:</b>${user.name}</p>
             <p><b>email:</b>${user.email}</p>
             <p><b>idade:</b>${user.birthdate}</p>
+            <p><b>Data de nascimento:</b>${user.birthdate}</p>
             <p><b>cidade:</b>${user.address}</p>
-            <p><b>celular:</b>${user.phone}</p>
+            <p><b>celular:</b>${user.telephone}</p>
             <p><b>cpf:</b>${user.cpf}</p>
         </div>
         `
@@ -99,37 +156,7 @@ function showAllUser() {
     document.getElementById("user-list").innerHTML = showingUsers
     document.getElementById("contador").innerHTML = `total:${arrList.users.length}`
 }
- function getZodiacSign() {
-    let birthdate = new Date(this.birthdate);
-    let day = birthdate.getDate();
-    let month = birthdate.getMonth() + 1;
-    console.log("Passou pelo getSigno() da class User");
-    if ((month == 1 && day <= 20) || (month == 12 && day >= 22)) {
-        return "Capricórnio ♑";
-    } else if ((month == 1 && day >= 21) || (month == 2 && day <= 18)) {
-        return "Aquário ♒";
-    } else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
-        return "Peixes ♓";
-    } else if ((month == 3 && day >= 21) || (month == 4 && day <= 20)) {
-        return "Áries ♈";
-    } else if ((month == 4 && day >= 21) || (month == 5 && day <= 20)) {
-        return "Touro ♉";
-    } else if ((month == 5 && day >= 21) || (month == 6 && day <= 20)) {
-        return "Gêmeos ♊";
-    } else if ((month == 6 && day >= 22) || (month == 7 && day <= 22)) {
-        return "Câncer ♋";
-    } else if ((month == 7 && day >= 23) || (month == 8 && day <= 23)) {
-        return "Leão ♌";
-    } else if ((month == 8 && day >= 24) || (month == 9 && day <= 23)) {
-        return "Virgem ♍";
-    } else if ((month == 9 && day >= 24) || (month == 10 && day <= 23)) {
-        return "Libra ♎";
-    } else if ((month == 10 && day >= 24) || (month == 11 && day <= 22)) {
-        return "Escorpião ♏";
-    } else if ((month == 11 && day >= 23) || (month == 12 && day <= 21)) {
-        return "Sagitário ♐";
-    }
-}
+
 function formatedCPF(cpf) {
     console.log("Passou pela funcao formatedCPF()");
     let cpfArray = cpf.split("");
