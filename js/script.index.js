@@ -3,11 +3,13 @@ class User {
         this.name = name
         this.email = email
         this.birthdate = birthdate
-        this.age = 'age'
         this.city = city
-        this.cpf = cpf
         this.telephone = telephone
-        this.client = 'client'
+        this.cpf = cpf
+        this.age = this.getPersonAge()
+        this.zodiac = this.getZodiacSign()
+        this.client = this.possibleClient();
+
     }
 
     getZodiacSign() {
@@ -42,8 +44,29 @@ class User {
         }
     }
 
-    getPersonAge(){
-        console.log();
+    getPersonAge() {
+        console.log("passou pela conta da idade");
+
+        const birthdaydate = this.birthdate;
+        const birthYear = new Date(birthdaydate).getFullYear();
+        const weYear = new Date().getFullYear();
+        const birthMonth = new Date(birthdaydate).getMonth() + 1;
+        const weMonth = new Date().getMonth() + 1;
+
+        const age = weYear - birthYear;
+        if (birthMonth > weMonth) {
+            return age - 1;
+        } else {
+            return age;
+        }
+    }
+    possibleClient() {
+        let client = 0;
+        if (this.age < 18 || this.age > 26) {
+            return "não é um possível cliente"
+        } if (this.age >= 18 || this.age <= 26) {
+            return "É um possível cliente"
+        }
     }
 
 }
@@ -57,8 +80,8 @@ class UserList {
             sendErrorMsg("Preecha todos os campos")
         } else if (!valida_cpf(param.cpf)) {
             sendErrorMsg("CPF Invalido");
-        } else if (isAlredyExiste()) {
-
+        } else if (isAlredyExiste(param.cpf)) {
+            sendErrorMsg("CPF ja cadastrado");
         } else {
             sendSucessMsg()
             this.users.push(param)
@@ -66,9 +89,10 @@ class UserList {
         }
 
     }
-}
-function isAlredyExiste() {
 
+    getArray(){
+        return this.users;
+    }
 }
 function sendSucessMsg() {
     document.getElementById("success-msg").innerHTML = "Parabens, você entrou na lista de espera!"
@@ -87,6 +111,12 @@ function showRegister() {
 
 let msg = "";
 const arrList = new UserList();
+
+function isAlredyExiste(cpf) {
+    const array =  arrList.users();
+    return array.some(user => user.cpf === cpf);
+
+}
 
 function isAnyImputAmpty() {
     const name = document.getElementById("name").value
@@ -111,7 +141,6 @@ function clearField() {
     document.getElementById("phone").value = ""
     document.getElementById("cpf").value = ""
 }
-
 function createUser() {
     const name = document.getElementById("name").value
     const email = document.getElementById("email").value
@@ -128,7 +157,6 @@ function createUser() {
     clearField()
 
 }
-
 function sendErrorMsg(msg) {
     console.log("Passou pela funcao sendErrorMsg()");
     document.getElementById("error-msg").innerHTML = msg;
@@ -137,7 +165,6 @@ function sendErrorMsg(msg) {
         document.getElementById("error-msg").classList.add("hidden");
     }, 4000);
 }
-
 function showAllUser() {
     let showingUsers = '';
     arrList.users.forEach((user) => {
@@ -145,8 +172,9 @@ function showAllUser() {
         <div class="list-eachUser">
             <p><b>nome:</b>${user.name}</p>
             <p><b>email:</b>${user.email}</p>
-            <p><b>idade:</b>${user.birthdate}</p>
             <p><b>Data de nascimento:</b>${user.birthdate}</p>
+            <p><b>idade:</b>${user.age}</p>
+            <p><b>signo:</b>${user.zodiac}</p>
             <p><b>cidade:</b>${user.address}</p>
             <p><b>celular:</b>${user.telephone}</p>
             <p><b>cpf:</b>${user.cpf}</p>
@@ -156,7 +184,6 @@ function showAllUser() {
     document.getElementById("user-list").innerHTML = showingUsers
     document.getElementById("contador").innerHTML = `total:${arrList.users.length}`
 }
-
 function formatedCPF(cpf) {
     console.log("Passou pela funcao formatedCPF()");
     let cpfArray = cpf.split("");
