@@ -1,6 +1,7 @@
 function showUsers() {
     document.getElementById("main-div").classList.add("hidden")
     document.getElementById("sub-div").classList.remove("hidden")
+    showAllUser()
 }
 
 function showRegister() {
@@ -24,7 +25,7 @@ class UserList {
     constructor() {
         this.users = [];
     }
-    addUser(param){
+    addUser(param) {
         this.users.push(param)
     }
 }
@@ -44,7 +45,7 @@ function isAnyImputAmpty() {
     }
     document.getElementById("error-msg").innerHTML = msg
 }
-function clearField(){
+function clearField() {
     document.getElementById("name").value = ""
     document.getElementById("email").value = ""
     document.getElementById("birthdate").value = ""
@@ -53,7 +54,7 @@ function clearField(){
     document.getElementById("cpf").value = ""
 }
 
-function createUser(){
+function createUser() {
     const name = document.getElementById("name").value
     const email = document.getElementById("email").value
     const birthdate = document.getElementById("birthdate").value
@@ -67,7 +68,7 @@ function createUser(){
     sendErrorMsg(msg)
     arrList.addUser(user)
     clearField()
-    
+
 }
 
 function sendErrorMsg(msg) {
@@ -79,3 +80,19 @@ function sendErrorMsg(msg) {
     }, 4000);
 }
 
+function showAllUser() {
+    let showingUsers = '';
+    arrList.users.forEach((user) => {
+        showingUsers += `
+        <div class="list-eachUser">
+            <p><b>nome:</b>${user.name}</p>
+            <p><b>email:</b>${user.email}</p>
+            <p><b>idade:</b>${user.birthdate}</p>
+            <p><b>cidade:</b>${user.address}</p>
+            <p><b>celular:</b>${user.phone}</p>
+            <p><b>cpf:</b>${user.cpf}</p>
+        </div>
+        `
+    })
+    document.getElementById("user-list").innerHTML = showingUsers
+}
